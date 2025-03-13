@@ -3,7 +3,7 @@ import noteContext from "../context/notes/noteContext";
 const AddNote = () => {
   const context = useContext(noteContext);
   const { addNote } = context;
-  const [note, setNote] = useState({ title: "", description: "", tag: "default" });
+  const [note, setNote] = useState({ title: "", description: "", tag: "" });
   const handleClick = (e) => {
     e.preventDefault();
     addNote(note.title,note.description,note.tag);
@@ -30,6 +30,7 @@ const AddNote = () => {
               id="title"
               aria-describedby="emailHelp"
               name="title"
+              value={note.title}
               onChange={onChange}
             />
           </div>
@@ -41,7 +42,21 @@ const AddNote = () => {
               type="text"
               className="form-control"
               id="description"
+              value={note.description}
               name="description"
+              onChange={onChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="etag" className="form-label">
+              Tag
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="tag"
+              value={note.tag}
+              name="tag"
               onChange={onChange}
             />
           </div>
