@@ -46,7 +46,17 @@ const NoteState = (props) => {
     setNotes(notes.concat(note));
   };
   //Delete a Note
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdjNTlhYTQxOGJiNmE3MTI2MWYzYWY2In0sImlhdCI6MTc0MTAyMDAyMX0.LrUrDc5rAqEUEIfMHJB4PiyDUthuLbRTp9xOQMy_JkY",
+      },
+    });
+    const json = await response.json();
+
     const newNotes = notes.filter((note) => {
       return note._id !== id;
     });
@@ -56,7 +66,7 @@ const NoteState = (props) => {
   const editNote = async (id, title, description, tag) => {
     //API CALL
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":

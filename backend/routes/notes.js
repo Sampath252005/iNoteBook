@@ -14,7 +14,7 @@ router.get("/fetchallnotes", fetchuser, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-//ROUTE 2:post All the notes using GET"/api/auth/addnoter".Login required
+//ROUTE 2:post All the notes using GET"/api/auth/addnote".Login required
 router.post(
   "/addnote",
   fetchuser,
@@ -79,35 +79,28 @@ router.put("/updatenote/:id", fetchuser, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-module.exports = router;
 //ROUTE 4:Delete a note DELTET"/api/notes/delete note".Login required
 router.delete("/deletenote/:id", fetchuser, async (req, res) => {
-  //create newNote object
   try {
-    const newNote = {};
-    if (title) {
-      newNote.title = title;
-    }
-    if (description) {
-      newNote.description = description;
-    }
-    if (tag) {
-      newNote.tag = tag;
-    }
+    // Find note to be deleted
     let note = await Notes.findById(req.params.id);
-    //find note to be deltected
     if (!note) {
-      return res.status(404).send("Not Found");
+      return res.status(404).json({ error: "Note not found" });
     }
-    //Delete the note if and only if user owns this note
+
+    // Allow deletion only if the user owns this note
     if (note.user.toString() !== req.user.id) {
-      return res.status(403).send("Not Allowed");
+      return res.status(401).json({ error: "Unauthorized: Not allowed to delete this note" });
     }
-    note = await Notes.findByIdAndDelete(req.params.id);
-    res.json({ Succes: "Note has delected", note: note });
+
+    // Delete the note
+    await Notes.findByIdAndDelete(req.params.id);
+
+    res.json({ success: "Note has been deleted", note });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal server error");
+    console.error("Error deleting note:", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
 module.exports = router;
