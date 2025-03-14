@@ -78,6 +78,7 @@ const Notes = () => {
                     value={note.etitle}
                     name="etitle"
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -91,6 +92,7 @@ const Notes = () => {
                     value={note.edescription}
                     name="edescription"
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -104,6 +106,7 @@ const Notes = () => {
                     name="etag"
                     value={note.etag}
                     onChange={onChange}
+                    required
                   />
                 </div>
               </form>
@@ -121,6 +124,7 @@ const Notes = () => {
                 type="button"
                 className="btn btn-primary"
                 onClick={handleClick}
+                disabled={note.etitle.length<5||note.edescription.length<5}
               >
                 Update Note
               </button>
@@ -130,6 +134,9 @@ const Notes = () => {
       </div>
       <div className="row my-3">
         <h2>Your Note</h2>
+        <div className="container d">
+        {notes.length===0 && 'No Notes to display'}
+        </div>
         {notes.map((notes, index) => {
           return <NoteItem key={index} updateNote={updateNote} note={notes} />;
         })}
