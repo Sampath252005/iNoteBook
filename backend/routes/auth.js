@@ -17,10 +17,11 @@ router.post(
     body("password").isLength({ min: 5 }),
   ],
   async (req, res) => {
+    let success=false;
     //if there are return bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success,errors: errors.array() });
     }
     //check weather the user with the same email or email exist already
     try {
@@ -28,7 +29,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ error: "User with this email already exist" });
+          .json({success, error: "User with this email already exist" });
       }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
@@ -45,6 +46,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
+      success=true;
       console.log(authToken);
       res.json({ authToken });
     } catch (error) {
@@ -66,7 +68,7 @@ router.post(
     const errors = validationResult(req);
     //if there are return bad request and the errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success,errors: errors.array() });
     }
     const { email, password } = req.body;
     try {
@@ -79,7 +81,6 @@ router.post(
       const passwordcompare = await bcrypt.compare(password, user.password);
 
       if (!passwordcompare) {
-        success=false;
         return res
           .status(400)
           .json({ success,error: "Please login with correct credential" });

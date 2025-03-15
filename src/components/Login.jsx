@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function Login() {
-  let history=useHistory();
+  let history=useNavigate();
   const[credential,setCredential]=useState({email:"",password:""})
   const onChange = (e) => {
     setCredential({
@@ -20,14 +20,9 @@ function Login() {
     });
     const json= await response.json();
     console.log(json);
-    if(json.success){
       //save the authtoken and redirect
       localStorage.setItem('token',json.authtoken);
-      history.push("/")
-    }
-    else{
-      alert("Inalid credential");
-    }
+      history("/")
   }
   return (
     <div>
@@ -41,7 +36,7 @@ function Login() {
     <label htmlFor="password1" className="form-label">Password</label>
     <input type="password" name='password' className="form-control" id="exampleInputPassword1" value={credential.password} onChange={onChange}/>
   </div>
-  <button type="submit" className="btn btn-primary" >Submit</button>
+  <button type="submit" className="btn btn-primary" >Login</button>
 </form>
     </div>
   )

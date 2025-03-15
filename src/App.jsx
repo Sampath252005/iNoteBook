@@ -7,7 +7,8 @@ import About from "./components/About";
 import NoteState from "./context/notes/NoteState";
 import Alert from "./components/Alert";
 import Login from "./components/Login";
-import SingUp from "./components/SingUp";
+import SignUp from "./components/SignUp";
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,7 +24,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/Login" element={<Login/>} />
-              <Route path="/SignUp" element={<SingUp/>} />
+              <Route path="/SignUp" element={<SignUp/>} />
             </Routes>
           </div>
         </Router>
