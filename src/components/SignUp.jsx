@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { useNavigate } from "react-router-dom";
 
-const SingUp = () => {
+const SingUp = (props) => {
   const[credential,setCredential]=useState({name:"",email:"",password:"",cpassword:""})
   let history=useNavigate();
   const onChange = (e) => {
@@ -26,9 +26,15 @@ const SingUp = () => {
     });
     const json= await response.json();
     console.log(json.success,json);
+    if(json.success){
       //save the authtoken and redirect
       localStorage.setItem('token',json.authtoken);
-      history("/")
+      history("/");
+      props.showAlert("Account Created succesfully","success")
+    }
+    else{
+      props.showAlert("Invalid Credential","danger")
+    }
   }
 
   return (
