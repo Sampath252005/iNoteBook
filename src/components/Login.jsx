@@ -23,8 +23,8 @@ function Login(props) {
     if(json.success){
       //save the authtoken and redirect
       localStorage.setItem('token',json.authtoken);
-      history("/");
       props.showAlert("Logged  succesfully","success")
+      history("/");
     }
     else{
       props.showAlert("Invalid Credential","danger")

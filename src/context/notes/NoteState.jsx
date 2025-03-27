@@ -7,17 +7,33 @@ const NoteState = (props) => {
   const [notes, setNotes] = useState(notesInitial);
   //add get all Notes
   const getNotes = async () => {
-    //TODO api calls
-    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdjNTlhYTQxOGJiNmE3MTI2MWYzYWY2In0sImlhdCI6MTc0MTAyMDAyMX0.LrUrDc5rAqEUEIfMHJB4PiyDUthuLbRTp9xOQMy_JkY",
-      },
-    });
-    const json = await response.json();
-    setNotes(json);
+    try {
+      const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem('token'), // Ensure the token is correctly retrieved
+        },
+      });
+  
+      // Check if the response is OK (status code 200-299)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch notes: ${response.status} ${response.statusText}`);
+      }
+  
+      const json = await response.json();
+  
+      // Ensure the response is an array before setting it to state
+      if (Array.isArray(json)) {
+        setNotes(json);
+      } else {
+        console.error('Expected an array of notes, but got:', json);
+        setNotes([]); // Set notes to an empty array to avoid errors
+      }
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+      setNotes([]); // Set notes to an empty array in case of an error
+    }
   };
   //add a Note
   const addNote = async (title, description, tag) => {
@@ -27,7 +43,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdjNTlhYTQxOGJiNmE3MTI2MWYzYWY2In0sImlhdCI6MTc0MTAyMDAyMX0.LrUrDc5rAqEUEIfMHJB4PiyDUthuLbRTp9xOQMy_JkY",
+          localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -41,7 +57,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdjNTlhYTQxOGJiNmE3MTI2MWYzYWY2In0sImlhdCI6MTc0MTAyMDAyMX0.LrUrDc5rAqEUEIfMHJB4PiyDUthuLbRTp9xOQMy_JkY",
+          localStorage.getItem('token')
       },
     });
     const json = await response.json();
@@ -59,7 +75,7 @@ const NoteState = (props) => {
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjdjNTlhYTQxOGJiNmE3MTI2MWYzYWY2In0sImlhdCI6MTc0MTAyMDAyMX0.LrUrDc5rAqEUEIfMHJB4PiyDUthuLbRTp9xOQMy_JkY",
+          localStorage.getItem('token')
       },
       body: JSON.stringify({ title, description, tag }),
     });
